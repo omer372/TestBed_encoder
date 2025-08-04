@@ -121,4 +121,77 @@ Open two terminal windows (if running on the same PC):
 
 With these steps completed, your full 5G system with integrated encoder and decoder will be up and running.
 
+## Final Steps: Running Encoder, Decoder, and Transmitting Data
+
+Once your system is fully up and running, with the UE successfully attached to the gNB and recognized by the core, you can begin data transmission.
+
+### Step 1: Confirm UE and gNB Attachment
+
+To verify that the gNB and UE are correctly registered in the core, check the logs of the Access and Mobility Management Function (AMF):
+
+```bash
+docker logs oai-amf
+```
+
+This log should show details about connected gNBs and UEs.
+
+---
+
+### Step 2: Load the Encoder Image
+
+On both the **core (Ext-DN side)** and the **UE side**, load the encoder Docker image:
+
+```bash
+sudo docker load -i encoder.tar
+```
+
+This command will load the pre-purchased Netcode-IMG encoder image into Docker.
+
+---
+
+### Step 3: Start Encoder and Decoder Containers
+
+1. **Enter the Ext-DN container:**
+
+   ```bash
+   docker exec -it oai-ext-dn bash
+   ```
+
+2. **Enter the Encoder container (running separately):**
+
+   ```bash
+   docker exec -it hcs-encoder bash
+   ```
+
+3. **Run your desired encoder with chosen settings** (details provided with your Netcode-IMG license).
+
+4. **On the UE side**, run the decoder with a matching configuration. This is also based on the purchased image.
+
+---
+
+### Step 4: Send Packets from Ext-DN to UE
+
+We use a PCAP file to simulate packet transmission from the Ext-DN to the UE.
+
+1. **Copy the traffic replay tool and PCAP file into the Ext-DN container:**
+
+   ```bash
+   sudo docker cp tcpreplay-4.4.2 oai-ext-dn:/tmp/
+   sudo docker cp ENCODER_vid_1080.pcap oai-ext-dn:/tmp/
+   ```
+
+2. **Inside the Ext-DN container**, use `tcpreplay` to send the packets:
+
+   ```bash
+   cd /tmp/
+   ./tcpreplay -i eth0 ENCODER_vid_1080.pcap
+   ```
+
+3. **At the UE**, ensure your decoder is running to receive and decode the transmitted data.
+
+---
+
+With this setup, you should now see packets being transmitted from the Ext-DN, encoded, passed through the 5G pipeline, and finally decoded at the UE. This completes a full data flow through a live 5G network integrated with encoder-decoder modules.
+
+
 ---
