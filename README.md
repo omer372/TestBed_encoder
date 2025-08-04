@@ -195,3 +195,34 @@ With this setup, you should now see packets being transmitted from the Ext-DN, e
 
 
 ---
+
+
+
+## Analyzing Radio Resource Usage with FlexRIC
+
+To analyze how different encoder settings affect radio resource usage, we integrate **FlexRIC**, a near real-time RAN Intelligent Controller (RIC). FlexRIC allows monitoring and control of various RAN parameters via xApps.
+
+🔗 **FlexRIC GitLab Repo**: [https://gitlab.eurecom.fr/mosaic5g/flexric](https://gitlab.eurecom.fr/mosaic5g/flexric)  
+📺 **FlexRIC Tutorial Webinar**: [FlexRIC xApp Development Tutorial](https://openairinterface.org/flexric-tutorial-xapp-development/)
+
+### Steps to Use FlexRIC:
+
+1. **Install and build FlexRIC** by cloning the repository and navigating to the root directory:
+
+   ```bash
+   ./build/examples/ric/nearRT-RIC
+   ```
+
+2. **Run the xApp for KPM (Key Performance Metrics) Monitoring**:
+
+   ```bash
+   ./build/examples/xApp/c/monitor/xapp_kpm_moni
+   ```
+
+   This xApp monitors real-time KPIs related to resource block usage, PRB allocation, throughput, etc. It helps you understand the effect of different encoders and their parameters on RAN resource efficiency.
+
+   > ✅ You can also explore other xApps within the FlexRIC project to analyze different metrics.
+
+---
+
+With this integration, your setup provides full visibility into how the encoder influences the 5G radio layer, from end-to-end packet transmission to resource consumption analytics.
