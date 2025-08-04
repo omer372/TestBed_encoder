@@ -81,3 +81,44 @@ In this project, by placing the encoder between the Ext-DN and UPF, we gain cont
 - Quality of Experience (QoE) for users
 
 This testbed design provides a flexible platform for evaluating encoding strategies within real 5G network components using OpenAirInterface.
+
+
+## How to Implement and Run the Complete System
+
+### Running the Core Network
+
+The 5G core is deployed as a Docker container. To start it, navigate to the `oai-cn5g` directory in your repository and run:
+
+```bash
+docker-compose up -d
+```
+
+This command will launch all necessary core network components in the background.
+
+### Running gNB and UE on Bare Metal
+
+The gNB and UE run directly on hardware (bare metal). After downloading and building the OpenAirInterface repository, navigate to:
+
+```
+cmake_targets/ran_build/build/
+```
+
+Open two terminal windows (if running on the same PC):
+
+- **Terminal 1:** Run the gNB with the following command:
+
+  ```bash
+  sudo ./nr-softmodem -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf --gNBs.[0].min_rxtxtime 5 --rfsim --sa -E
+  ```
+
+- **Terminal 2:** Run the UE with this command:
+
+  ```bash
+  sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --uicc0.imsi 001010000000001 --rfsimulator.serveraddr 127.0.0.1 -E
+  ```
+
+---
+
+With these steps completed, your full 5G system with integrated encoder and decoder will be up and running.
+
+---
