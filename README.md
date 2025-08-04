@@ -1,6 +1,9 @@
+
 # 5G System Setup with Encoder Integration
 
 This repository presents a setup design for a small-scale project aimed at simplifying the deployment of a complete 5G system. It integrates encoders into the 5G pipeline to evaluate their impact on network performance, resource usage, and packet loss prevention. This setup allows researchers or engineers to better understand how different encoder types and configurations affect radio resources and overall system efficiency.
+
+---
 
 ## Project Purpose
 
@@ -10,6 +13,8 @@ The project focuses on showing:
 - The impact of encoder parameter variations on radio resource allocation
 
 This setup is particularly useful for small research environments or labs interested in low-cost yet functional 5G testbeds.
+
+---
 
 ## System Requirements and Deployment
 
@@ -26,12 +31,34 @@ We use the **OpenAirInterface (OAI)** framework to deploy the 5G system. The Git
 - Older versions of OAI run on **Ubuntu 20.04**
 - The latest versions also support **Ubuntu 24.04**
 
+---
+
 ## Building the System
 
 To build the system, first download the OAI repository from the link above. Once downloaded, navigate to the `cmake_targets` directory and use the following command to build the necessary components:
 
 ```bash
 ./build_oai -I --gNB --nrUE
+```
+
+The 5G system consists of three major parts:
+1. **Core**
+2. **gNB (Next-generation Node B)**
+3. **UE (User Equipment)**
+
+---
+
+## Core Network and Encoder Placement
+
+We deployed the **5G Core** using **Docker containers**, making it easier to manage and run. The gNB and UE components are deployed directly on **bare metal** for performance and hardware testing.
+
+The encoder is placed **between the External Data Network (Ext-DN) and the User Plane Function (UPF)**. This placement is strategic and provides a simplified way to analyze how encoders interact with traffic flow and how they affect the user experience under different conditions.
+
+The `oai-cn5g` folder included in this repository contains the Docker-based core setup, including a `docker-compose` file for launching the system.
+
+> 🔐 **Note:** We use a **paid version of the encoder** (Netcode-IMG). You must purchase the required license in order to run the encoder within this system.
+
+---
 
 ## About 5G Systems
 
@@ -40,9 +67,9 @@ To build the system, first download the OAI repository from the link above. Once
 A typical 5G system is composed of three major components:
 
 - **Core Network (5G CN):** Handles authentication, session management, data routing, and connectivity to external networks. In our project, the core is deployed as a set of Docker containers.
-  
+
 - **gNB (Next-Generation NodeB):** Acts as the base station responsible for radio access and connecting UEs to the core network.
-  
+
 - **UE (User Equipment):** Represents end-user devices, like phones or embedded sensors, which connect to the gNB to access 5G services.
 
 One key focus of modern 5G research is **optimizing the user plane**, where data traffic flows. Integrating encoders at this layer helps analyze how different encoding schemes affect overall system efficiency, delay, and resource allocation.
@@ -54,7 +81,3 @@ In this project, by placing the encoder between the Ext-DN and UPF, we gain cont
 - Quality of Experience (QoE) for users
 
 This testbed design provides a flexible platform for evaluating encoding strategies within real 5G network components using OpenAirInterface.
-
-
-
-
